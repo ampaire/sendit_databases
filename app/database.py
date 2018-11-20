@@ -13,30 +13,30 @@ class Database:
     def __init__(self):
         try:
             self.connection = psycopg2.connect(dbname='sendit',
-                                                user='postgres',
-                                                password='akankunda',
-                                                host='localhost',
-                                                port='5432')
+                                               user='postgres',
+                                               password='akankunda',
+                                               host='localhost',
+                                               port='5432')
             self.connection.autocommit = True
             self.cursor = self.connection.cursor()
-            print('we are good')
+
         except(Exception, psycopg2.DatabaseError) as error:
             raise error
 
     def create_tables(self):
-        commands = (
+        parcel_orderss = (
             """
-            CREATE TABLE IF NOT EXISTS "useers" (
+            CREATE TABLE IF NOT EXISTS "users" (
                     userId SERIAL PRIMARY KEY,
                     username VARCHAR(50) NOT NULL,
                     email VARCHAR(50) NOT NULL,
                     password VARCHAR(200) NOT NULL,
-                    role VARCHAR (15) NOT NULL
+                    role DEFAULT False
 
                 )
             """,
             """
-            CREATE TABLE IF NOT EXISTS "parscels" (                    
+            CREATE TABLE IF NOT EXISTS "parcels" (                    
                     parcelId SERIAL PRIMARY KEY,
                     userId INT REFERENCES users(userId),
                     username VARCHAR(30) NOT NULL,
@@ -47,13 +47,16 @@ class Database:
                     parcel_created date
                 )
                 """,)
-        for command in commands:
-            self.cursor.execute(command)
+        for parcel_orders in parcel_orderss:
+            self.cursor.execute(parcel_orders)
 
-    def register_user(self,userId, username, email, password,role):
+    def register_user(self, userId, username, email, password, role):
         query = "INSERT INTO users (userId, username, email, password, role) \
-        VALUES ('{}', '{}', '{}', '{}', '{}')".format(userId, username, email, password,role)
+        VALUES ('{}', '{}', '{}', '{}', '{}')".format(userId, username, email, password, role)
         self.cursor.execute(query)
 
-
-
+    def login_a_user(self, email, password):
+        login_query = "SELECT from users (email,password) WHERE email ='{}'".format(
+            email)
+        self.cursor.execute(login_query)
+        return [email, password]
