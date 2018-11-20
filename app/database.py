@@ -12,6 +12,8 @@ class Database:
 
     def __init__(self):
         try:
+            if(os.getenv("FLASK_ENV")) == "Production":
+                self.connection = psycopg2.connect(os.getenv("DATABASE_URL"))
             self.connection = psycopg2.connect(dbname='sendit',
                                                user='postgres',
                                                password='akankunda',
@@ -56,7 +58,7 @@ class Database:
         self.cursor.execute(query)
 
     def login_a_user(self, email, password):
-        login_query = "SELECT* FROM users (email) WHERE email ='{}'".format(
+        login_query = "SELECT email FROM users WHERE email ='{}'".format(
             email)
         self.cursor.execute(login_query)
         return [email, password]
