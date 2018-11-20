@@ -31,7 +31,7 @@ class Database:
                     username VARCHAR(50) NOT NULL,
                     email VARCHAR(50) NOT NULL,
                     password VARCHAR(200) NOT NULL,
-                    role DEFAULT False
+                    role BOOLEAN DEFAULT False
 
                 )
             """,
@@ -50,13 +50,13 @@ class Database:
         for parcel_orders in parcel_orderss:
             self.cursor.execute(parcel_orders)
 
-    def register_user(self, userId, username, email, password, role):
-        query = "INSERT INTO users (userId, username, email, password, role) \
-        VALUES ('{}', '{}', '{}', '{}', '{}')".format(userId, username, email, password, role)
+    def register_user(self, username, email, password):
+        query = "INSERT INTO users ( username, email, password) \
+        VALUES ('{}', '{}', '{}')".format( username, email, password)
         self.cursor.execute(query)
 
     def login_a_user(self, email, password):
-        login_query = "SELECT from users (email,password) WHERE email ='{}'".format(
+        login_query = "SELECT* FROM users (email) WHERE email ='{}'".format(
             email)
         self.cursor.execute(login_query)
         return [email, password]
