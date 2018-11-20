@@ -2,6 +2,7 @@ import os
 import time
 import datetime
 import psycopg2
+from app.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -25,6 +26,9 @@ class Database:
         except(Exception, psycopg2.DatabaseError) as error:
             raise error
 
+    def drop_tables(self):
+        self.cursor.execute("DROP TABLE IF EXISTS users, parcels CASCADE")
+
     def create_tables(self):
         parcel_orderss = (
             """
@@ -35,6 +39,7 @@ class Database:
                     password VARCHAR(200) NOT NULL,
                     role BOOLEAN DEFAULT False
 
+
                 )
             """,
             """
@@ -43,15 +48,18 @@ class Database:
                     userId INT REFERENCES users(userId),
                     username VARCHAR(30) NOT NULL,
                     pickup_location VARCHAR(30) NOT NULL,
+                    present_location VARCHAR(30) NOT NULL,
                     recipient VARCHAR(30) NOT NULL,
+                    destination VARCHAR(30) NOT NULL,
                     description VARCHAR(100) NOT NULL,
-                    status VARCHAR(15) NOT NULL,
-                    parcel_created date
+                    status VARCHAR(15) ,
+                    parcel_creation date
                 )
                 """,)
         for parcel_orders in parcel_orderss:
             self.cursor.execute(parcel_orders)
 
+    #metthods for the users
     def register_user(self, username, email, password):
         query = "INSERT INTO users ( username, email, password) \
         VALUES ('{}', '{}', '{}')".format( username, email, password)
@@ -62,3 +70,16 @@ class Database:
             email)
         self.cursor.execute(login_query)
         return [email, password]
+
+    def get_all_availabe_users(self, username, email):
+        getUsers_query = "SELECT (username,email) FROM user WHERE email = \
+        '{}' and username = '{}'".format(email,password)
+        self.cursor.execute(getUsers_query)
+
+    # def get_admin_role(self, role):
+
+    #methods for the parcels
+    def post_new_order(self, pickup_location, destination,recipient, description):
+        post_query = "INSERT INTO parcels (pickup_location, destination, recipient, description) \
+        VALUES ('{}', '{}', '{}', '{}')".format( pickup_location, destination, recipient, description)
+        self.cursor.execute(post_query)
