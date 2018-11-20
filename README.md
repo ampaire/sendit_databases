@@ -7,7 +7,7 @@ SendIT
 ## Coveralls Badge
 [![Coverage Status](https://coveralls.io/repos/github/ampaire/sendit_databases/badge.svg)](https://coveralls.io/github/ampaire/sendit_databases)
 ## Code climate Maintainability Badge
-<a[![Maintainability](https://api.codeclimate.com/v1/badges/e45ee7961a5399f8b081/maintainability)](https://codeclimate.com/github/ampaire/sendit_api/maintainability)src="https://api.codeclimate.com/v1/badges/e45ee7961a5399f8b081/maintainability" /></a>
+[![Maintainability](https://api.codeclimate.com/v1/badges/e45ee7961a5399f8b081/maintainability)](https://codeclimate.com/github/ampaire/sendit_api/maintainability)
 ## github repo link
 https://github.com/ampaire/sendit_databases
 ## heroku Demo link
