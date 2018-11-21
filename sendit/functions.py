@@ -1,6 +1,6 @@
 import re
 from flask import Flask, request, jsonify
-from app import app
+from sendit import app
 
 def json_response(title, message):
     json_message = {title: message}

@@ -1,6 +1,6 @@
-from app.database import Database
-from app import app
-from app.api.routes import register_new_user
+from sendit.database import Database
+from sendit import app
+from sendit.api.routes import register_new_user
 db = Database()
 db.create_tables()
 db.drop_tables

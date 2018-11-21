@@ -2,7 +2,7 @@ import os
 import time
 import datetime
 import psycopg2
-from app.models import User
+from sendit.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -33,9 +33,9 @@ class Database:
                     username VARCHAR(50) NOT NULL,
                     email VARCHAR(50) NOT NULL,
                     password VARCHAR(200) NOT NULL,
-                    role BOOLEAN DEFAULT False
-                    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    role BOOLEAN DEFAULT False,
+                    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 
                 )
@@ -43,30 +43,28 @@ class Database:
             """
             CREATE TABLE IF NOT EXISTS "parcels" (                    
                     parcelId SERIAL PRIMARY KEY,
-                    userId INT REFERENCES users(userId),
-                    username VARCHAR(30),
+                    userId INT REFERENCES users(userId) NULL,
+                    username VARCHAR(30) NULL,
                     pickup_location VARCHAR(30) NOT NULL,
-                    present_location VARCHAR(30) NOT NULL,
+                    present_location VARCHAR(30) NULL,
                     recipient VARCHAR(30) NOT NULL,
                     destination VARCHAR(30) NOT NULL,
                     description VARCHAR(100) NOT NULL,
-                    status VARCHAR(15) ,
+                    status VARCHAR(15) NULL,
                     created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
                 """,)
         for parcel_orders in parcel_orderss:
             self.cursor.execute(parcel_orders)
 
     # metthods for the users
-    def register_user(self, username, email, password):
+    def get_user(self, username, email, password):
         signup_query = "INSERT INTO users ( username, email, password) \
         VALUES ('{}', '{}', '{}')".format(username, email, password)
-        # if signup_query:
-        #     return jsonify({"message": "User with same credentials already exists! Try logging in"}, {"status": "Failure"})
         self.cursor.execute(signup_query)
 
-    def login_a_user(self, email, password):
+    def get_logged_in_user(self, email, password):
         login_query = "SELECT email FROM users WHERE email ='{}'".format(
             email)
         self.cursor.execute(login_query)
@@ -83,19 +81,41 @@ class Database:
         VALUES ('{}', '{}', '{}', '{}')".format(pickup_location, destination, recipient, description)
         self.cursor.execute(post_query)
 
-    # def get_all_parcels(self, username, pickup_location, destination, recipient, description):
-    #     get_parcels_query
+    def get_all_parcels(self, username, pickup_location, destination, recipient, description, status):
+        get_parcels_query= "SELECT * FROM parcels"
+        self.cursor.execute(get_parcels_query)
+
+    def get_one_parcel(self, username, pickup_location, destination, recipient, description, status):
+        get_one_parcel_query= "SELECT * FROM parcels WHERE parcelId= {}".format(parcelId)
+        self.cursor.execute(get_one_parcel_query)
 
 
-    def update_parcel_order(self, myorder):
-            """update parcel data"""
-            try:
-                self.cur.execute(
-                    "UPDATE parcels SET destination='{}', pickupLocation={}, destination = '{}',\
-                    recipient = '{}', status = '{}',\
-                    date_updated = CURRENT_TIMESTAMP WHERE orderID = {}".format(myorder.destination,\
-                    myorder.pickupLocation, myorder.destination, myorder.recipient, myorder.status, myorder.orderID)
-                )
+    def update_parcel_order_status(self, status):
+        """
+        update parcel order status
+        """
+        status_query= "SELECT parcelId FROM parcels WHERE parcelId= {}".format(parcelId)
+        self.cursor.execute(status_query)
 
-            except:
-                return False
+        update_status_query= "UPDATE parcels SET status = {},\
+        date_updated = CURRENT_TIMESTAMP WHERE parcelId = {}".format (status, parcelId)
+        self.cur.execute(update_status_query)
+
+    def update_parcel_destination(self, destination):
+        """update parcel order destination"""
+        destination_query= "SELECT parcelId FROM parcels WHERE parcelId= {}".format(parcelId)
+        self.cursor.execute(status_query)
+
+        update_destination_query= "UPDATE parcels SET destination = {},\
+        date_updated= CURRENT_TIMESTAMP WHERE parcelId= {}".format(destination, parcelId)
+        self.cursor.execute(update_destination_query)
+
+    def update_present_location(self,present_location):
+        """
+        Update the present location of a parcel order
+        """
+        status_query= "SELECT parcelId FROM parcels WHERE parcelId= {}".format(parcelId)
+        self.cursor.execute(status_query)
+
+        update_location= "UPDATE parcels SET present_location={},\
+        date_updated= CURRENT_TIMESTAMP WHERE parcelId= {}".format(present_location, parcelId)"
