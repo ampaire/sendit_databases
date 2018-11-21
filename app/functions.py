@@ -1,3 +1,4 @@
+import re
 from flask import Flask, request, jsonify
 from app import app
 
@@ -16,7 +17,7 @@ def check_validity_of_username(username):
 
 def check_validity_of_input(**kwargs):
     for key, value in kwargs.items():
-        if value is not None and value != '' and len(value) != 0:
+        if value is not None and value != '' and len(value) != 0 and len(value) < 5:
             return True
         else:
             return False
