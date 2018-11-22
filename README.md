@@ -3,7 +3,7 @@
 SendIT
 [![Build Status](https://travis-ci.org/ampaire/sendit_databases.svg?branch=develop)](https://travis-ci.org/ampaire/sendit_databases)
 [![Coverage Status](https://coveralls.io/repos/github/ampaire/sendit_databases/badge.svg)](https://coveralls.io/github/ampaire/sendit_databases)
-[![Maintainability](https://api.codeclimate.com/v1/badges/e45ee7961a5399f8b081/maintainability)](https://codeclimate.com/github/ampaire/sendit_api/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/478addc5447a153336a1/maintainability)](https://codeclimate.com/github/ampaire/sendit_databases/maintainability)
 ## github repo link
 https://github.com/ampaire/sendit_databases
 
