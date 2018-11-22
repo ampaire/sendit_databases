@@ -31,8 +31,6 @@ def register_new_user():
     if db.get_user_by_email(email):
         return jsonify({'message':'User with that email already exists', "Status":"Failure"})
 
-    if check_validity_of_input(username=username, email=email, password=password) == False:
-        return jsonify({'message': 'Some fields are empty', "status":"Failure"}), 400
 
     if check_validity_of_mail(email) == None:
         return jsonify({'message': 'Invalid email format!', "status":"Failure"}), 400
@@ -133,11 +131,11 @@ def get_one_delivery_order(parcelId):
 
 
 #Cancel the status of a specific parcel delivery order
-@app.route('/api/v1/parcels/<int:parcelId>/cancel', methods=['PUT'])
+@app.route('/api/v1/parcels/<int:parcelId>', methods=['PUT'])
 @jwt_required
 def update_status(parcelId):
     """
-    cancel status of a parcel delivery order
+    updated the status of a parcel delivery order
     """
     data = request.get_json()
     status = data.get("status")
@@ -146,25 +144,35 @@ def update_status(parcelId):
         user_info = get_jwt_identity()
         if not parcel['userId'] == user_info['userId']:
             return jsonify({"message":"You cannot update the status of this parcel", "status":"Failure"}), 401
-    return jsonify({"message":"Parcel succesfully cancelled", "status":"Success", "response":"Parcel Order status updated" }), 200
-    # return jsonify({"message":"No parcel exists under that Id", "status":"Failure"}), 400
+        return jsonify({"message":"Parcel succesfully cancelled", "status":"Success", "response":"Parcel Order status updated" }), 200
+    return jsonify({"message":"No parcel exists under that Id", "status":"Failure"}), 400
 
-#Change the destination of a specific parcel delivery order
+
 # @app.route('/api/v1/parcels/<int:parcelId>', methods= ['PUT'])
 # @jwt_required
 # def update_destination(parcelId):
 #     """
 #     Update the destination of a parcel delivery order
 #     """
-#     parcel = db.update_parcel_destination(parcelId)
+#     data = request.get_json()
+#     status = data.get("status")
+#     parcel = db.(parcelId,status)
 #     if parcel:
-#         current_user = get_jwt_identity()
-#         if not parcel['userId']== current_user['userId']:
-#             return jsonify({"message":"You cannot update the destination of this parcel", "status":"Failure"}), 401
+#         user_info = get_jwt_identity()
+#         if not parcel['userId'] == user_info['userId']:
+#             return jsonify({"message":"You cannot update the status of this parcel", "status":"Failure"}), 401
+#         return jsonify({"message":"Parcel succesfully cancelled", "status":"Success", "response":"Parcel Order status updated" }), 200
+#     return jsonify({"message":"No parcel exists under that Id", "status":"Failure"}), 400
+# #Change the present location of a specific parcel delivery order
 
-#         if check_validity_of_input(destination=destination) == False:
-#             return jsonify({'message':'The destination field cannot be left empty', "status":"Failure"}), 400
-#         db.update_parcel_destination(parcel)
-#         return jsonify ({"message":""})
-            
-#Change the present location of a specific parcel delivery order
+# @app.route('/api/v1/parcels/<int:parcelId>', methods= ['PUT'])
+# def update_the_current_location(parcelId):
+#     data = request.get_json()
+#     status = data.get("status")
+#     parcel = db.update_parcel_order_status(parcelId,status)
+#     if parcel:
+#         user_info = get_jwt_identity()
+#         if not parcel['userId'] == user_info['userId']:
+#             return jsonify({"message":"You cannot update the status of this parcel", "status":"Failure"}), 401
+#     return jsonify({"message":"Parcel succesfully cancelled", "status":"Success", "response":"Parcel Order status updated" }), 200
+#     return jsonify({"message":"No parcel exists under that Id", "status":"Failure"}), 400

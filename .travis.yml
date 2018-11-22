@@ -1,7 +1,6 @@
 language: python
 python:
   - "3.5"
-  - "2.7"
 install:
   - pip install -r requirements.txt
 services:
@@ -12,8 +11,7 @@ addons:
   postgresql: "9.4"
 script:
   - pytest --cov=.
-  - coverage  
-  - coveralls 
+  - coverage3 report 
 after_success:
 - coveralls
 

@@ -43,14 +43,18 @@ class Database:
             """
             CREATE TABLE IF NOT EXISTS "parcels" (                    
                     parcelId SERIAL PRIMARY KEY,
-                    userId INT REFERENCES users(userId) NULL,
-                    username VARCHAR(30) NULL,
+                    userId integer,
+                    FOREIGN KEY (userId)
+                    REFERENCES users(userId),
+                    username VARCHAR(20),
+                    FOREIGN KEY (username)
+                    REFERENCES users(username),
                     pickup_location VARCHAR(30) NOT NULL,
-                    present_location VARCHAR(30) NULL,
+                    present_location VARCHAR(30) DEFAULT 'unknown',
                     recipient VARCHAR(30) NOT NULL,
                     destination VARCHAR(30) NOT NULL,
                     description VARCHAR(100) NOT NULL,
-                    status VARCHAR(15) NULL,
+                    status VARCHAR(15) DEFAULT 'Pending',
                     created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
@@ -59,6 +63,10 @@ class Database:
             self.cursor.execute(parcel_orders)
 
     # metthods for the users
+    def define_admin_rights(self):
+        admin = "INSERT INTO users(email, username, password, role)\ VALUES('admin@sendit.com', 'admin', 'admin', 'admin')"
+        self.cursor.execute(admin)
+        
     def get_user(self, username, email, password):
         signup_query = "INSERT INTO users ( username, email, password) \
         VALUES ('{}', '{}', '{}')".format(username, email, password)
@@ -74,9 +82,7 @@ class Database:
         query = "SELECT username FROM users"
         self.cursor.execute(query)
         users = self.cursor.fetchall()
-        return users
-
-        
+        return users        
 
     def get_logged_in_user(self, email, password):
         login_query = "SELECT email FROM users WHERE email ='{}'".format(
@@ -101,36 +107,26 @@ class Database:
         return self.cursor.fetchall()
 
     def get_one_parcel(self,parcelId):
-        get_one_parcel_query= "SELECT * FROM parcels WHERE parcelId= {}".format(parcelId)
+        get_one_parcel_query= "SELECT * FROM parcels WHERE parcelId= '{}' ".format(parcelId)
         self.cursor.execute(get_one_parcel_query)        
         return self.cursor.fetchone()
-
-
 
     def update_parcel_order_status(self, parcelId, status):
         """
         update parcel order status
         """
-        update_status_query= "UPDATE parcels SET status = '{}' WHERE parcelId = {}".format (status, parcelId)
+        update_status_query= "UPDATE parcels SET status = '{}' WHERE parcelId = '{}' ".format (status, parcelId)
         self.cursor.execute(update_status_query)
 
 
     def update_parcel_destination(self, parcelId):
         """update parcel order destination"""
-        destination_query= "SELECT parcelId FROM parcels WHERE parcelId= {}".format(parcelId)
-        self.cursor.execute(status_query)
-        
-        update_destination_query= "UPDATE parcels SET destination = {},\
-        date_updated= CURRENT_TIMESTAMP WHERE parcelId= {}".format(destination, parcelId)
+        update_destination_query= "UPDATE parcels SET destination = '{}' WHERE parcelId= '{}' ".format(destination, parcelId)
         self.cursor.execute(update_destination_query)
 
     def update_present_location(self,parcelId):
         """
         Update the present location of a parcel order
         """
-        status_query= "SELECT parcelId FROM parcels WHERE parcelId= {}".format(parcelId)
-        self.cursor.execute(status_query)
-
-        update_location= "UPDATE parcels SET present_location={},\
-        date_updated= CURRENT_TIMESTAMP WHERE parcelId= {}.format(present_location, parcelId)"
-
+        update_location= "UPDATE parcels SET present_location = '{}' WHERE parcelId= '{}' ".format(destination, parcelId)
+        self.cursor.execute(update_location)
