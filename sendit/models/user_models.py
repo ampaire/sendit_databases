@@ -24,7 +24,7 @@ class User:
     @staticmethod    
     def post_user(username, email, password):
         signup_query = "INSERT INTO users ( username, email, password) \
-        VALUES ('{}', '{}', '{}')".format(username, email, password, False)
+        VALUES ('{}', '{}', '{}')".format(username, email, password)
         db_class.cursor.execute(signup_query)
 
     @staticmethod
