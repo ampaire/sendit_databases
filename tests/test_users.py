@@ -1,9 +1,9 @@
 import json
 import unittest
-from sendit.api.routes import register_new_user, login, get_all_users
-from sendit import app
+from sendit.api.authentication import register_new_user, login
+from sendit.api.routes import get_all_users
 from sendit.database import Database
-
+from sendit import app
 
 class TestUserRoutes(unittest.TestCase):
     def setUp(self):
@@ -13,7 +13,7 @@ class TestUserRoutes(unittest.TestCase):
         # db.create_tables()
         # db.drop_tables()
     
-    demo_user = {
+    test_user = {
         'username': 'Effie',
         'password': 'password',
         'email': 'Effie@mail.com'
@@ -79,7 +79,7 @@ class TestUserRoutes(unittest.TestCase):
     def test_an_email_already_in_emails(self):
         response = self.client.post(
             ('api/v1/auth/signup'), data=json.dumps(self.test_user))
-        self.assertTrue(response.status_code == 400)
+        self.assertFalse(response.status_code == 200)
 
     def test_missing_password_field_at_sign_up(self):
         response = self.client.post(
