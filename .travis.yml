@@ -1,18 +1,16 @@
 language: python
 python:
-  - "3.5"
+  - 3.5
 install:
   - pip install -r requirements.txt
 services:
   - postgresql
+env:
+  global:
+    - APP_SETTINGS=testing
 before_script:
-  - psql -c 'create database sendit;' -U postgres
-addons:
-  postgresql: "9.4"
+  - psql -c 'create database test_db;' -U postgres
 script:
-  - pytest --cov=.
-  - coverage3 report 
+  - pytest app/tests --cov=app/views --cov-report 
 after_success:
-- coveralls
-
-  
+  - coveralls
