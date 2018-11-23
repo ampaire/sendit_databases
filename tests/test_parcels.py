@@ -109,9 +109,9 @@ class TestparcelRoutes(unittest.TestCase):
                             content_type='application/json')
         Access_token = json.loads(login_data.data.decode())
         response = self.client.get(
-            '/api/v1/parcels/2',
+            '/api/v1/parcels/1',
         headers={'Authorization': self.create_token()})
-        self.assertFalse(response.status_code == 400)
+        self.assertTrue(response.status_code == 200)
 
     def test_unauthorized_user_at_getting_a_parcel(self):
         self.client.post('/api/v1/auth/signup', data=json.dumps(self.signup),
