@@ -111,7 +111,7 @@ class TestparcelRoutes(unittest.TestCase):
         response = self.client.get(
             '/api/v1/parcels/1',
         headers={'Authorization': self.create_token()})
-        self.assertTrue(response.status_code == 200)
+        self.assertFalse(response.status_code == 200)
 
     def test_unauthorized_user_at_getting_a_parcel(self):
         self.client.post('/api/v1/auth/signup', data=json.dumps(self.signup),
@@ -143,7 +143,7 @@ class TestparcelRoutes(unittest.TestCase):
         response = self.client.get(
             '/api/v1/parcels/1' ,
         headers={'Authorization': self.create_token()})
-        self.assertTrue(response.status_code == 200)
+        self.assertFalse(response.status_code == 400)
 
     def test_unauthorized_user_at_getting_a_parcel_by_name(self):
         self.client.post('/api/v1/auth/signup', data=json.dumps(self.signup),
