@@ -8,8 +8,8 @@ from psycopg2.extras import RealDictCursor
 class Database:
     def __init__(self):
         try:
-            if(os.getenv("FLASK_ENV")) == "Production":
-                self.connection = psycopg2.connect(os.getenv("DATABASE_URL"))
+            # if(os.getenv("FLASK_ENV")) == "Production":
+            #     self.connection = psycopg2.connect(os.getenv("DATABASE_URL"))
             self.connection = psycopg2.connect(dbname='sendit',
                                                user='postgres',
                                                password='akankunda',

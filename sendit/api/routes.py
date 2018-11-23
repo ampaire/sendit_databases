@@ -27,8 +27,8 @@ def create_parcel_delivery_order():
     register new parcel delivery order
     """
     current_user = get_jwt_identity()
-    if current_user['admin'] == True:
-        return jsonify({'message':'Access rights to this route denied', 'status': 'Failure'}), 403
+    # if current_user['admin'] == True:
+    #     return jsonify({'message':'Access rights to this route denied', 'status': 'Failure'}), 403
 
     data = request.get_json(force=True)
 
