@@ -8,8 +8,7 @@ from psycopg2.extras import RealDictCursor
 class Database:
     def __init__(self):
         try:
-            # if(os.getenv("FLASK_ENV")) == "Production":
-            #     self.connection = psycopg2.connect(os.getenv("DATABASE_URL"))
+        
             self.connection = psycopg2.connect(dbname='sendit',
                                                user='postgres',
                                                password='akankunda',
@@ -34,7 +33,7 @@ class Database:
                     username VARCHAR(50) NOT NULL,
                     email VARCHAR(50) NOT NULL,
                     password VARCHAR(200) NOT NULL,
-                    admin BOOLEAN NOT NULL,
+                    admin BOOLEAN DEFAULT False,
                     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
